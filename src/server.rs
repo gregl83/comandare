@@ -1,10 +1,10 @@
 use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
-use std::process::Command;
 
 use crate::Logger;
 use crate::format_address;
+use crate::parse;
 
 fn handle_client(log: Logger, mut stream: TcpStream) {
     let mut buffer = Vec::new();
@@ -12,11 +12,7 @@ fn handle_client(log: Logger, mut stream: TcpStream) {
         Ok(_) => {
             let command = String::from_utf8( buffer ).unwrap();
             log.out(format!("Command received: {}", command));
-
-            // parse command for program and args
-            let args: Vec<_> = command.split(" ").collect();
-            let result = Command::new(args[0]).args(&args[1..]).output();
-            // execute command
+            let result = parse(&command);
             match result {
                 Ok(output) => {
                     stream.write_all(output.stdout.as_slice()).unwrap();
