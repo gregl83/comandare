@@ -35,6 +35,7 @@ Supported modes:
 - Tests
 - Error handling
 - Refactoring modules
+- Better command parsing (handling pipe, etc)
 
 much more...
 
