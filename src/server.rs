@@ -5,7 +5,7 @@ use std::io::{Read, Write};
 use crate::Logger;
 use crate::format_address;
 
-fn handle_client(mut stream: TcpStream) {
+fn handle_client(log: Logger, mut stream: TcpStream) {
     let mut data = [0 as u8; 50]; // using 50 byte buffer
     while match stream.read(&mut data) {
         Ok(size) => {
@@ -14,8 +14,7 @@ fn handle_client(mut stream: TcpStream) {
             true
         },
         Err(_) => {
-            // fixme - use logger
-            println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
+            log.out(format!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap()));
             stream.shutdown(Shutdown::Both).unwrap();
             false
         }
@@ -31,9 +30,10 @@ pub fn listen(log: Logger, host: &str, port: u16) {
         match stream {
             Ok(stream) => {
                 log.out(format!("New connection: {}", stream.peer_addr().unwrap()));
+                let thread_log = log.clone();
                 thread::spawn(move|| {
                     // connection succeeded
-                    handle_client(stream)
+                    handle_client(thread_log, stream)
                 });
             }
             Err(e) => {
