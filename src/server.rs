@@ -1,47 +1,59 @@
 use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
+use std::process::Command;
 
 use crate::Logger;
 use crate::format_address;
 
 fn handle_client(log: Logger, mut stream: TcpStream) {
-    let mut data = [0 as u8; 50]; // using 50 byte buffer
-    while match stream.read(&mut data) {
-        Ok(size) => {
-            // echo everything!
-            stream.write(&data[0..size]).unwrap();
-            true
+    let mut buffer = Vec::new();
+    match stream.read_to_end(&mut buffer) {
+        Ok(_) => {
+            let command = String::from_utf8( buffer ).unwrap();
+            log.out(format!("Command received: {}", command));
+
+            // parse command for program and args
+            let args: Vec<_> = command.split(" ").collect();
+            let result = Command::new(args[0]).args(&args[1..]).output();
+            // execute command
+            match result {
+                Ok(output) => {
+                    stream.write_all(output.stdout.as_slice()).unwrap();
+                    stream.write_all(output.stderr.as_slice()).unwrap();
+                }
+                Err(e) => {
+                    log.out(format!("An error occurred, terminating connection with: {}", e));
+                }
+            }
+            stream.shutdown(Shutdown::Both).unwrap();
         },
         Err(_) => {
-            log.out(format!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap()));
             stream.shutdown(Shutdown::Both).unwrap();
-            false
+            log.out(format!("An error occurred, terminating connection with: {}", stream.peer_addr().unwrap()));
         }
-    } {}
+    }
 }
 
 pub fn listen(log: Logger, host: &str, port: u16) {
     let address = format_address(host, port);
     let listener = TcpListener::bind(address).unwrap();
-    // accept connections and process them, spawning a new thread for each one
+
     log.out(format!("Server listening on port {}", port));
+
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
                 log.out(format!("New connection: {}", stream.peer_addr().unwrap()));
+
                 let thread_log = log.clone();
                 thread::spawn(move|| {
-                    // connection succeeded
-                    handle_client(thread_log, stream)
+                    handle_client(thread_log, stream);
                 });
             }
             Err(e) => {
                 log.out(format!("Error: {}", e));
-                /* connection failed */
             }
         }
     }
-    // close the socket server
-    drop(listener);
 }
