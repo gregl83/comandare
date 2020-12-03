@@ -4,17 +4,15 @@ use std::io::{Read, Write};
 use crate::Logger;
 use crate::format_address;
 
-pub fn connect(log: Logger, host: &str, port: u16) {
+pub fn connect(log: Logger, host: &str, port: u16, command: &str) {
     let address = format_address(host, port);
     match TcpStream::connect(&address) {
         Ok(mut stream) => {
             log.out(format!("Successfully connected to server in port {}", port));
 
-            let msg = b"ls";
-
             let mut buffer = Vec::new();
 
-            stream.write_all(msg).unwrap();
+            stream.write_all(command.as_bytes()).unwrap();
             stream.shutdown(Shutdown::Write).unwrap();
 
             log.out(format!("Sent command to {}", &address));

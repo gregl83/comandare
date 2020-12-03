@@ -17,7 +17,7 @@ fn main() {
 
     // check number of arguments
     if args.len() < 3 {
-        eprintln!("[MODE] [HOST] [PORT] [:--DEBUG|-D]");
+        eprintln!("[MODE] [HOST] [PORT] [:--DEBUG|-D] -- [:COMMAND]");
         exit(1);
     }
 
@@ -50,7 +50,16 @@ fn main() {
             listen(log, host, port);
         }
         "client" => {
-            connect(log, host, port);
+            match args.iter().position(|x| x.eq("--")) {
+                Some(index) => {
+                    let command_offset = index + 1;
+                    let command: &str = &args[command_offset..args.len()].join(" ");
+                    connect(log, host, port, command);
+                }
+                None => {
+                    eprintln!("MODE 'client' requires COMMAND");
+                }
+            }
         },
         _ => {}
     }
