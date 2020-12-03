@@ -32,17 +32,20 @@ Supported modes:
 
 ## Improvements
 
+- Auth connections
 - Documentation (code and usage)
 - Tests
 - Error handling
 - Refactoring modules
-- Better command parsing (handling pipe, etc)
+- Command parsing module (handling pipe, etc)
 
 much more...
 
-## Note
+## Caution
 
 This package is not intended on being deployed or used in an environment other than for educational testing; thus, sacrifices have been made to simply assemble a proof of concept. NOT to be used maliciously. 
+
+The TCP Server does not implement any form of Auth leaving your network security as the sole guardian of your data.
 
 Opening TCP Ports on a system *can* be bad, use at your own risk!
 
