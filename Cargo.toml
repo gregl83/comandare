@@ -9,3 +9,11 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+[lib]
+name = "comandare"
+path = "src/lib.rs"
+
+[[bin]]
+name = "comandare"
+path = "src/bin.rs"
