@@ -32,6 +32,7 @@ Supported modes:
 
 ## Improvements
 
+- Documentation (code and usage)
 - Tests
 - Error handling
 - Refactoring modules
