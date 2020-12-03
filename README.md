@@ -39,6 +39,12 @@ Supported modes:
 
 much more...
 
+## Note
+
+This package is not intended on being deployed or used in an environment other than for educational testing; thus, sacrifices have been made to simply assemble a proof of concept. NOT to be used maliciously. 
+
+Opening TCP Ports on a system *can* be bad, use at your own risk!
+
 ## License
 
-MIT
+[MIT](LICENSE)
