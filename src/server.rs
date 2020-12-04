@@ -2,9 +2,12 @@ use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
 
-use crate::Logger;
-use crate::format_address;
-use crate::parse;
+use crate::{
+    Logger,
+    Loggable,
+    format_address,
+    parse
+};
 
 fn handle_client(log: Logger, mut stream: TcpStream) {
     let mut buffer = Vec::new();

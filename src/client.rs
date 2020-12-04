@@ -1,8 +1,11 @@
 use std::net::{TcpStream, Shutdown};
 use std::io::{Read, Write};
 
-use crate::Logger;
-use crate::format_address;
+use crate::{
+    Logger,
+    Loggable,
+    format_address
+};
 
 pub fn connect(log: Logger, host: &str, port: u16, command: &str) {
     let address = format_address(host, port);

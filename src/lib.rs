@@ -4,7 +4,7 @@ mod server;
 mod command;
 
 // expose interface
-pub use log::Logger;
+pub use log::{Logger, Loggable};
 pub use client::connect;
 pub use server::listen;
 pub use command::parse;
@@ -18,7 +18,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_format_address() {
+    fn formats_network_address() {
         assert_eq!("localhost:0", format_address("localhost", 0));
         assert_eq!("localhost:1234", format_address("localhost", 1234));
 

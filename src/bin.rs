@@ -1,6 +1,10 @@
 use std::env;
 use std::process::exit;
-use comandare::{Logger, listen, connect};
+use comandare::{
+    Logger,
+    listen,
+    connect
+};
 
 const MODES: [&str; 2] = [
     "client",
