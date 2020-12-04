@@ -1,4 +1,7 @@
-use std::io::{self, Write};
+use std::io::{
+    self,
+    Write,
+};
 
 pub trait Loggable {
     fn out(&self, message: String);
@@ -12,23 +15,23 @@ pub struct Logger {
 
 impl Logger {
     pub fn new(debug: bool) -> Self {
-        Logger {
-            debug,
-        }
+        Logger { debug }
     }
 }
 
 impl Loggable for Logger {
     fn out(&self, message: String) {
         if self.debug {
-            io::stdout().write_all(message.as_bytes()).unwrap();
-            io::stdout().flush().unwrap();
+            let mut stdout= io::stdout();
+            stdout.write_all(message.as_bytes()).unwrap();
+            stdout.flush().unwrap();
         }
     }
 
     fn err(&self, message: String) {
-        io::stderr().write_all(message.as_bytes()).unwrap();
-        io::stderr().flush().unwrap();
+        let mut stderr = io::stderr();
+        stderr.write_all(message.as_bytes()).unwrap();
+        stderr.flush().unwrap();
     }
 }
 
