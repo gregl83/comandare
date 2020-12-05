@@ -7,7 +7,7 @@ use crate::{
     format_address
 };
 
-pub fn connect(log: Logger, host: &str, port: u16, command: &str) {
+pub fn connect(log: &mut Logger, host: &str, port: u16, command: &str) {
     let address = format_address(host, port);
     match TcpStream::connect(&address) {
         Ok(mut stream) => {

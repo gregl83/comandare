@@ -1,5 +1,7 @@
 use std::env;
 use std::process::exit;
+use std::io;
+use std::sync::{Arc, Mutex};
 use comandare::{
     Logger,
     listen,
@@ -47,18 +49,20 @@ fn main() {
     });
 
     // implement logger with basic debug switch
-    let log = Logger::new(debug.is_some());
+    let stdout = Arc::new(Mutex::new(io::stdout()));
+    let stderr = Arc::new(Mutex::new(io::stderr()));
+    let mut log = Logger::new(debug.is_some(), stdout, stderr);
 
     match mode.as_str() {
         "server" => {
-            listen(log, host, port);
+            listen(&mut log, host, port);
         }
         "client" => {
             match args.iter().position(|x| x.eq("--")) {
                 Some(index) => {
                     let command_offset = index + 1;
                     let command: &str = &args[command_offset..args.len()].join(" ");
-                    connect(log, host, port, command);
+                    connect(&mut log, host, port, command);
                 }
                 None => {
                     eprintln!("MODE 'client' requires COMMAND");

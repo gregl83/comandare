@@ -9,7 +9,7 @@ use crate::{
     parse
 };
 
-fn handle_client(log: Logger, mut stream: TcpStream) {
+fn handle_client(log: &mut Logger, mut stream: TcpStream) {
     let mut buffer = Vec::new();
     match stream.read_to_end(&mut buffer) {
         Ok(_) => {
@@ -34,7 +34,7 @@ fn handle_client(log: Logger, mut stream: TcpStream) {
     }
 }
 
-pub fn listen(log: Logger, host: &str, port: u16) {
+pub fn listen(log: &mut Logger, host: &str, port: u16) {
     let address = format_address(host, port);
     let listener = TcpListener::bind(address).unwrap();
 
@@ -45,9 +45,9 @@ pub fn listen(log: Logger, host: &str, port: u16) {
             Ok(stream) => {
                 log.out(format!("New connection: {}", stream.peer_addr().unwrap()));
 
-                let thread_log = log.clone();
+                let mut thread_log = log.clone();
                 thread::spawn(move|| {
-                    handle_client(thread_log, stream);
+                    handle_client(&mut thread_log, stream);
                 });
             }
             Err(e) => {

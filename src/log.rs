@@ -1,37 +1,50 @@
-use std::io::{
-    self,
-    Write,
-};
+use std::io::Write;
+use std::sync::{Arc, Mutex};
 
 pub trait Loggable {
-    fn out(&self, message: String);
-    fn err(&self, message: String);
+    fn out(&mut self, message: String);
+    fn err(&mut self, message: String);
 }
 
-#[derive(Debug, Clone)]
 pub struct Logger {
-    debug: bool
+    debug: bool,
+    stdout: Arc<Mutex<dyn Write + Send>>,
+    stderr: Arc<Mutex<dyn Write + Send>>,
 }
 
 impl Logger {
-    pub fn new(debug: bool) -> Self {
-        Logger { debug }
+    pub fn new(debug: bool, stdout: Arc<Mutex<dyn Write + Send>>, stderr: Arc<Mutex<dyn Write + Send>>) -> Self {
+        Logger {
+            debug,
+            stdout,
+            stderr,
+        }
     }
 }
 
 impl Loggable for Logger {
-    fn out(&self, message: String) {
+    fn out(&mut self, message: String) {
         if self.debug {
-            let mut stdout= io::stdout();
+            let mut stdout = self.stdout.lock().unwrap();
             stdout.write_all(message.as_bytes()).unwrap();
             stdout.flush().unwrap();
         }
     }
 
-    fn err(&self, message: String) {
-        let mut stderr = io::stderr();
+    fn err(&mut self, message: String) {
+        let mut stderr = self.stderr.lock().unwrap();
         stderr.write_all(message.as_bytes()).unwrap();
         stderr.flush().unwrap();
+    }
+}
+
+impl Clone for Logger {
+    fn clone(&self) -> Self {
+        Logger {
+            debug: self.debug,
+            stdout: self.stdout.clone(),
+            stderr: self.stderr.clone(),
+        }
     }
 }
 
