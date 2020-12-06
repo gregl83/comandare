@@ -50,17 +50,70 @@ impl Clone for Logger {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use mockall::mock;
+    use std::io::Result;
+
+    mock!{
+        Stdout {}
+        trait Write{
+            fn write(&mut self, buf: &[u8]) -> Result<usize>;
+            fn write_all(&mut self, mut buf: &[u8]) -> Result<()>;
+            fn flush(&mut self) -> Result<()>;
+        }
+    }
+
+    mock!{
+        Stderr {}
+        trait Write{
+            fn write(&mut self, buf: &[u8]) -> Result<usize>;
+            fn write_all(&mut self, mut buf: &[u8]) -> Result<()>;
+            fn flush(&mut self) -> Result<()>;
+        }
+    }
 
     #[test]
     fn logs_out() {
-        assert_eq!(1, 2);
+        let expected = format!("info");
+
+        let mut stdout_mock = MockStdout::new();
+        // todo - add string eq predicate
+        stdout_mock.expect_write_all()
+            .times(1)
+            .returning(|_| Ok(()));
+        stdout_mock.expect_flush()
+            .times(1)
+            .returning(|| Ok(()));
+        let stderr_mock = MockStderr::new();
+        let mut logger = Logger::new(
+            true,
+            Arc::new(Mutex::new(stdout_mock)),
+            Arc::new(Mutex::new(stderr_mock))
+        );
+        logger.out(expected.clone());
     }
 
     #[test]
     fn logs_err() {
-        assert_eq!(1, 2);
+        let expected = format!("error");
+
+        let stdout_mock = MockStdout::new();
+        let mut stderr_mock = MockStderr::new();
+        // todo - add string eq predicate
+        stderr_mock.expect_write_all()
+            .times(1)
+            .returning(|_| Ok(()));
+        stderr_mock.expect_flush()
+            .times(1)
+            .returning(|| Ok(()));
+        let mut logger = Logger::new(
+            true,
+            Arc::new(Mutex::new(stdout_mock)),
+            Arc::new(Mutex::new(stderr_mock))
+        );
+        logger.err(expected.clone());
     }
 }

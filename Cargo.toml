@@ -20,3 +20,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "comandare"
 path = "src/bin.rs"
+
+[dev-dependencies]
+mockall = "0.8.0"
