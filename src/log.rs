@@ -1,6 +1,8 @@
 use std::io::Write;
 use std::sync::{Arc, Mutex};
 
+type LogStream = Arc<Mutex<dyn Write + Send>>;
+
 pub trait Loggable {
     fn out(&mut self, message: String);
     fn err(&mut self, message: String);
@@ -8,12 +10,12 @@ pub trait Loggable {
 
 pub struct Logger {
     debug: bool,
-    stdout: Arc<Mutex<dyn Write + Send>>,
-    stderr: Arc<Mutex<dyn Write + Send>>,
+    stdout: LogStream,
+    stderr: LogStream,
 }
 
 impl Logger {
-    pub fn new(debug: bool, stdout: Arc<Mutex<dyn Write + Send>>, stderr: Arc<Mutex<dyn Write + Send>>) -> Self {
+    pub fn new(debug: bool, stdout: LogStream, stderr: LogStream) -> Self {
         Logger {
             debug,
             stdout,
