@@ -55,6 +55,7 @@ impl Clone for Logger {
 mod tests {
     use super::*;
     use mockall::mock;
+    use mockall::predicate;
     use std::io::Result;
 
     mock!{
@@ -77,43 +78,57 @@ mod tests {
 
     #[test]
     fn logs_out() {
-        let expected = format!("info");
+        let value = "info";
+        let argument = format!("{}", value.clone());
 
         let mut stdout_mock = MockStdout::new();
-        // todo - add string eq predicate
         stdout_mock.expect_write_all()
+            .with(predicate::eq(value.clone().as_bytes()))
             .times(1)
             .returning(|_| Ok(()));
         stdout_mock.expect_flush()
             .times(1)
             .returning(|| Ok(()));
-        let stderr_mock = MockStderr::new();
+
+        let mut stderr_mock = MockStderr::new();
+        stderr_mock.expect_write_all()
+            .never();
+        stderr_mock.expect_flush()
+            .never();
+
         let mut logger = Logger::new(
             true,
             Arc::new(Mutex::new(stdout_mock)),
             Arc::new(Mutex::new(stderr_mock))
         );
-        logger.out(expected.clone());
+        logger.out(argument);
     }
 
     #[test]
     fn logs_err() {
-        let expected = format!("error");
+        let value = "error";
+        let argument = format!("{}", value.clone());
 
-        let stdout_mock = MockStdout::new();
+        let mut stdout_mock = MockStdout::new();
+        stdout_mock.expect_write_all()
+            .never();
+        stdout_mock.expect_flush()
+            .never();
+
         let mut stderr_mock = MockStderr::new();
-        // todo - add string eq predicate
         stderr_mock.expect_write_all()
+            .with(predicate::eq(value.clone().as_bytes()))
             .times(1)
             .returning(|_| Ok(()));
         stderr_mock.expect_flush()
             .times(1)
             .returning(|| Ok(()));
+
         let mut logger = Logger::new(
             true,
             Arc::new(Mutex::new(stdout_mock)),
             Arc::new(Mutex::new(stderr_mock))
         );
-        logger.err(expected.clone());
+        logger.err(argument.clone());
     }
 }
