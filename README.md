@@ -42,6 +42,10 @@ Supported modes:
 
 much more...
 
+## Model
+
+Comandare uses a server target model which is largely mitigated by any standard firewall. Incoming traffic in most configurations is rightfully blocked. Thus, binding a TCP Server to a specific port might work in a local network but be blocked from remote access over the internet or more networks backed by one or more firewalls. A more effective approach, since TCP is a two-way communication protocol, is to initiate a client target model with event-driven connection attempts.
+
 ## Caution
 
 This package is not intended on being deployed or used in an environment other than for educational testing; thus, sacrifices have been made to simply assemble a proof of concept. NOT to be used maliciously. 
@@ -49,6 +53,10 @@ This package is not intended on being deployed or used in an environment other t
 The TCP Server does not implement any form of Auth leaving your network security as the sole guardian of your data.
 
 Opening TCP Ports on a system *can* be bad, use at your own risk!
+
+## Final Words
+
+Hopefully this package can increase intuition on backdoor implementations indirectly helping secure systems.
 
 ## License
 

@@ -1,7 +1,6 @@
 use std::io;
 use std::process::{Command, Output};
 
-// todo - handle cases: cd & && | ||
 pub fn parse(command: &str) -> io::Result<Output> {
     // parse command for program and args
     let args: Vec<_> = command.split(" ").collect();
