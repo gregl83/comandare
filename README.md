@@ -19,8 +19,10 @@ Reinforce security intuition with network port management.
 1. [Install Rust and Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)
 2. Git clone this repository
 3. From cloned repository, run:
+
    `cargo install --path=.`
-4. That's it! `comandare` should now be installed on your system
+
+4. That's it, `comandare` should now be installed on your system!
 
 ## Usage
 
@@ -44,7 +46,7 @@ much more...
 
 ## Model
 
-Comandare uses a server target model which is largely mitigated by any standard firewall. Incoming traffic in most configurations is rightfully blocked. Thus, binding a TCP Server to a specific port might work in a local network but be blocked from remote access over the internet or more networks backed by one or more firewalls. A more effective approach, since TCP is a two-way communication protocol, is to initiate a client target model with event-driven connection attempts.
+Comandare uses a server target model which is largely mitigated by any standard firewall. Incoming traffic in most configurations is rightfully blocked. Thus, binding a TCP Server to a specific port might work in a local network but be blocked from remote access over the internet or networks backed by one or more firewalls. A more effective approach, since TCP is a two-way communication protocol, is to initiate a client target model with event-driven connection attempts.
 
 ## Caution
 
