@@ -66,7 +66,7 @@ An academic background in computer networking is worth its weight in gold while 
 Useful `netstat` command to get the ball rolling:
 
 ```bash
-netstat -tulnp
+sudo netstat -tulnp
 ```
 
 There are many other useful tools available, but between `Wireshark` and `netstat` one can easily evaluate network activity and identify suspicious actors.
