@@ -56,6 +56,21 @@ The TCP Server does not implement any form of Auth leaving your network security
 
 Opening TCP Ports on a system *can* be bad, use at your own risk!
 
+## Detection
+
+An academic background in computer networking is worth its weight in gold while evaluating potential network security threats. While this is true, there are a few tools that can be used to identify potential threats.
+
+- [Wireshark](https://www.wireshark.org/) network analyzer provides comprehensive details on network activity.
+- [netstat](https://en.wikipedia.org/wiki/Netstat) networking utility provides insight into port usage with minimal configuration.
+
+Useful `netstat` command to get the ball rolling:
+
+```bash
+netstat -tulnp
+```
+
+There are many other useful tools available, but between `Wireshark` and `netstat` one can easily evaluate network activity and identify suspicious actors.
+
 ## Final Words
 
 Hopefully this package can increase intuition on backdoor implementations indirectly helping secure systems.
