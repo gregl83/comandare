@@ -56,6 +56,10 @@ The TCP Server does not implement any form of Auth leaving your network security
 
 Opening TCP Ports on a system *can* be bad, use at your own risk!
 
+## Mitigation
+
+Controlling network port access is paramount to preventing unauthorized remote access to a given machine. Regularily updating, in a timely manner, security patches is important to prevent software vulnerabilities from introducing attack vectors that can circumvent sensible security policies. Defining security policies and locking down network access beyond what's needed for interactions with trusted parties. Choose firewall and monitoring tools from reputable transparent sources. Every time risk is reduced, the likelihood of a successfull attack goes down.
+
 ## Detection
 
 An academic background in computer networking is worth its weight in gold while evaluating potential network security threats. While this is true, there are a few tools that can be used to identify potential threats.
