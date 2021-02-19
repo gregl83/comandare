@@ -1,6 +1,6 @@
 # comandare
 
-TCP Command Execution
+TCP Command Line Execution.
 
 ## Problem Statement
 
@@ -32,17 +32,6 @@ Supported modes:
 
 - Client (uses command argument)
 - Server (doesn't use command argument)
-
-## Improvements
-
-- Auth connections
-- Documentation (code and usage)
-- Tests
-- Error handling
-- Refactoring modules
-- Command parsing module (handling pipe, etc)
-
-much more...
 
 ## Model
 
